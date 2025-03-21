@@ -14,6 +14,7 @@
 	```
     npm install firebase@11.5.0 --save
     npm install express cors dotenv firebase joi
+    npm install express cookie-parser firebase-admin
     ```
 2.  Estructura final del proyecto:   
 
@@ -33,12 +34,12 @@
 
 ## Endpoints disponibles:
 
-|Metodo  |  Endpoint | Funcion |
-|--|--|--|
-| POST | /clientes | Crear cliente |
-| GET  | /clientes | Listar clientes |
-| PUT  | /clientes/<id> | Actualizar |
-| DELETE  | /clientes/<id> | Eliminar |
+|Metodo  |  Endpoint      | Funcion         |
+|--------|----------------|-----------------|
+| POST   | /clientes      | Crear cliente   |
+| GET    | /clientes      | Listar clientes |
+| PUT    | /clientes/<id> | Actualizar      |
+| DELETE | /clientes/<id> | Eliminar        |
 
 
 ## Ejemplo de uso con curl:

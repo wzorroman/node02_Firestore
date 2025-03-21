@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { clientesRouter } from './routes/clientes.routes.js';
+import { clientesRouter } from './app/routers/clientes.routes.js';
 
 // 1. Configurar variables de entorno
 dotenv.config();
@@ -15,13 +15,13 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 4. Registrar rutas
-app.use('/clientes', clientesRouter);
-
-// 5. Ruta de prueba
+// 4. Ruta de prueba
 app.get('/', (req, res) => {
   res.send('API de Clientes en Firebase 🔥');
 });
+
+// 5. Registrar rutas
+app.use('/clientes', clientesRouter);
 
 // 6. Manejador de errores global
 app.use((err, req, res, next) => {

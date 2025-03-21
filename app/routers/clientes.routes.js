@@ -1,10 +1,10 @@
-// routes/clientes.routes.js
 import express from 'express';
 import { 
   createCliente, 
-  getClientes, 
-  updateCliente, 
-  deleteCliente 
+  getClientes,
+  getClienteById 
+  // updateCliente, 
+  // deleteCliente 
 } from '../controllers/clientes.controller.js';
 
 const router = express.Router();
@@ -27,4 +27,16 @@ router.get('/', async (_, res) => {
   }
 });
 
+// Ruta para obtener un cliente por ID
+router.get('/:id', async (req, res) => {
+    try {
+      const result = await getClienteById(req, res);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+
 // Implementar similares para PUT y DELETE
+
+export { router as clientesRouter };
