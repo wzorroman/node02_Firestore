@@ -3,7 +3,8 @@ import {
   createCliente, 
   getClientes,
   getClienteById,
-  updateCliente, 
+  updateCliente,
+  patchCliente, 
   deleteCliente 
 } from '../controllers/clientes.controller.js';
 
@@ -31,7 +32,6 @@ router.get('/', async (_, res) => {
   }
 });
 
-// Ruta para obtener un cliente por ID
 router.get('/:id', async (req, res) => {
     try {
       const result = await getClienteById(req, res);
@@ -40,7 +40,6 @@ router.get('/:id', async (req, res) => {
     }
   });
   
-// Ruta para actualizar un cliente
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,7 +50,16 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Ruta para eliminar un cliente
+router.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await patchCliente(id, req.body);
+    res.json(result);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;

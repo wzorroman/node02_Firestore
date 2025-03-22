@@ -11,13 +11,12 @@ import {
 } from 'firebase/firestore';
 import { validateCliente } from '../models/Cliente.js';
 
+
 const clientesRef = collection(db, 'clientes');
 
 export const createCliente = async (clienteData) => {
   const { error } = validateCliente(clienteData);
-  if (error) throw new Error(error.details[0].message);
-  
-  // return await addDoc(clientesRef, clienteData);
+  if (error) throw new Error(error.details[0].message);  
   try {
     const result = await addDoc(clientesRef, clienteData);
     return { id: result.id, ...clienteData };
@@ -57,6 +56,23 @@ export const updateCliente = async (id, updateData) => {
   
   await updateDoc(docRef, updateData);
   return { id, ...updateData };
+};
+
+export const patchCliente = async (id, updateData) => {
+  try {
+    const docRef = doc(db, 'clientes', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      await updateDoc(docRef, updateData);
+      const updatedDocSnap = await getDoc(docRef);
+      return { id, ...updatedDocSnap.data() };
+    } else {
+      throw new Error("Cliente no encontrado");
+    }
+  } catch (error) {
+    throw new Error(`Error al actualizar: ${error.message}`);
+  }
 };
 
 export const deleteCliente = async (id) => {
