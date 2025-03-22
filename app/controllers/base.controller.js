@@ -6,7 +6,12 @@ import {
   doc, 
   updateDoc, 
   deleteDoc, 
-  getDoc 
+  getDoc,
+  query,
+  where, 
+  orderBy, 
+  limit, 
+  startAfter   
 } from 'firebase/firestore';
 
 export class BaseController {
@@ -27,10 +32,38 @@ export class BaseController {
     }
   }
 
-  async getAll() {
+  async getAll({ limitSize = 10, offset = null, filter = null, orderByField = null, fields = null }) {
     try {
-      const snapshot = await getDocs(this.collectionRef);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      let q = query(this.collectionRef);
+      
+      if (filter) {
+        // Implementar filtro según sea necesario
+        // q = query(q, where('campo', '==', filter));
+      }
+      if (orderByField) {
+        q = query(q, orderBy(orderByField, 'asc'));
+      }
+  
+      if (limitSize) {
+        q = query(q, limit(limitSize));
+      }
+  
+      if (offset) {
+        // Implementar offset o startAfter según sea necesario
+        // q = query(q, startAfter(offset));
+      }
+  
+      const snapshot = await getDocs(q);
+      const result = snapshot.docs.map(doc => {
+        if (fields) {
+          // Implementar selección de campos según sea necesario
+          // return { id: doc.id, ...fields.reduce((acc, field) => ({ ...acc, [field]: doc.data()[field] }), {}) };
+        } else {
+          return { id: doc.id, ...doc.data() };
+        }
+      });
+  
+      return result;
     } catch (error) {
       throw new Error(`Error al obtener todos: ${error.message}`);
     }

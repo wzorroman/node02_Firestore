@@ -24,9 +24,21 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (_, res) => {
+router.get('/', async (req, res) => {
   try {
-    const clientes = await getClientes();
+    const limitSize = req.query.limit || 10;
+    const offset = req.query.offset;
+    const filter = req.query.filter;
+    const orderByField = req.query.orderBy;
+    const fields = req.query.fields;
+
+    const clientes = await getClientes({
+      limitSize: parseInt(limitSize),
+      offset,
+      filter,
+      orderByField,
+      fields
+    });
     res.json(clientes);
   } catch (error) {
     res.status(500).json({ error: error.message });
