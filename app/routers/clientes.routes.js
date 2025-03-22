@@ -8,6 +8,7 @@ import {
   deleteCliente 
 } from '../controllers/clientes.controller.js';
 
+
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -34,12 +35,15 @@ router.get('/', async (_, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-      const result = await getClienteById(req, res);
+      // const result = await getClienteById(req, res);
+      const { id } = req.params;
+      const result = await getClienteById(id);
+    res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
