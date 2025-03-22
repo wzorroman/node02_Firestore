@@ -17,7 +17,13 @@ export const createCliente = async (clienteData) => {
   const { error } = validateCliente(clienteData);
   if (error) throw new Error(error.details[0].message);
   
-  return await addDoc(clientesRef, clienteData);
+  // return await addDoc(clientesRef, clienteData);
+  try {
+    const result = await addDoc(clientesRef, clienteData);
+    return { id: result.id, ...clienteData };
+  } catch (error) {
+    throw new Error(`Error creating client: ${error.message}`);
+  }
 };
 
 export const getClientes = async () => {
@@ -34,7 +40,6 @@ export const getClienteById = async (req, res) => {
     if (docSnap.exists()) {
       const cliente = { id: docSnap.id, ...docSnap.data() };
       res.json(cliente);
-      console.log(cliente);
     } else {
       console.log('Cliente no encontrado');
       res.status(404).json({ error: 'Cliente no encontrado' });
@@ -56,6 +61,10 @@ export const updateCliente = async (id, updateData) => {
 
 export const deleteCliente = async (id) => {
   const docRef = doc(db, 'clientes', id);
+  const docSnap = await getDoc(docRef);
+  console.log(docSnap);
+
   await deleteDoc(docRef);
+
   return { id };
 };

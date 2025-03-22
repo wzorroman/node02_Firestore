@@ -2,9 +2,9 @@ import express from 'express';
 import { 
   createCliente, 
   getClientes,
-  getClienteById 
-  // updateCliente, 
-  // deleteCliente 
+  getClienteById,
+  updateCliente, 
+  deleteCliente 
 } from '../controllers/clientes.controller.js';
 
 const router = express.Router();
@@ -14,7 +14,11 @@ router.post('/', async (req, res) => {
     const result = await createCliente(req.body);
     res.status(201).json(result);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    const statusCode = error.message.includes('validation') ? 400 : 500;
+    res.status(statusCode).json({ 
+      error: error.message,
+      details: error.details || null
+    });
   }
 });
 
@@ -36,7 +40,27 @@ router.get('/:id', async (req, res) => {
     }
   });
   
+// Ruta para actualizar un cliente
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await updateCliente(id, req.body);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-// Implementar similares para PUT y DELETE
+// Ruta para eliminar un cliente
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await deleteCliente(id);
+    res.status(204).json({ message: 'Cliente eliminado correctamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 export { router as clientesRouter };

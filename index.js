@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 import { clientesRouter } from './app/routers/clientes.routes.js';
 
 // 1. Configurar variables de entorno
-dotenv.config();
+dotenv.config({ path: './.env' });
+console.log(" - INDEX => " + process.env.FIREBASE_API_KEY);
 
 // 2. Crear instancia de Express
 const app = express();

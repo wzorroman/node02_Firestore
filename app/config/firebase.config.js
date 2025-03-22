@@ -1,6 +1,9 @@
-import { loadEnvFile } from 'node:process';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import dotenv from 'dotenv';
+
+dotenv.config();
+console.log(" - aaa => " + process.env.FIREBASE_API_KEY);
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
